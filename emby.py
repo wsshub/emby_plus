@@ -7,11 +7,10 @@ from logging.config import dictConfig
 emby_url = 'https://movie.onerookie.site'
 alist_url = 'https://pan.onerookie.site/api/fs/get'
 main_site = "http://127.0.0.1:8096/"
-api_key = '3f54098f375443c8993e347e0aaaff74'
-user_id = '88f6bf5dd9ac4a62a105cd82c8aa42f3'
+api_key = 'emby的apiKey'
 main_port = '8096'
 new_port = '8097'
-password_value = "fileadmin"
+password_value = "alist密码"
 replace_list = [
     {
         "from": "/onedrive/od-movie/",
@@ -48,8 +47,9 @@ dictConfig({
 })
 
 app = Flask(__name__)
+#也可以用sqlite
 db = pymysql.connect(
-    host='127.0.0.1', port=3306, user='root', passwd='123456', database='myblog')
+    host='127.0.0.1', port=3306, user='root', passwd='xxxxx', database='xxxx')
 
 
 @app.route('/')
