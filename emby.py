@@ -17,14 +17,6 @@ replace_list = [
         "to": "https://pan.onerookie.site/d/onedrive/"
     },
     {
-        "from": "/onedrive/pp-movie-dav/",
-        "to": "https://pan.onerookie.site/d/emby/"
-    },
-    {
-        "from": "/onedrive/pp-movie2-dav/",
-        "to": "https://pan.onerookie.site/d/emby2/"
-    },
-    {
         "from": "/onedrive/ali/",
         "to": "https://pan.onerookie.site/d/ali/"
     }
