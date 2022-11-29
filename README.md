@@ -11,6 +11,8 @@ emby读取文件自动削刮元数据，播放时通过nginx反代播放请求�
 ### 目前不足
 rclone挂载的OneDrive中的视频emby可以刮到字幕，但是webdav挂载的阿里云盘下的视频挂不到字幕。  
   
-![](https://github.com/wsshub/emby_plus/blob/main/emby1.JPG)
-![](https://github.com/wsshub/emby_plus/blob/main/emby2.JPG)
+  
 ![](https://github.com/wsshub/emby_plus/blob/main/emby3.JPG)
+![](https://github.com/wsshub/emby_plus/blob/main/emby2.JPG)
+![](https://github.com/wsshub/emby_plus/blob/main/emby4.JPG)
+![](https://github.com/wsshub/emby_plus/blob/main/emby5.JPG)
