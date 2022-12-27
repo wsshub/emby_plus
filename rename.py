@@ -3,11 +3,12 @@ import os
 
 def getFileList(path):
     """输入文件夹路径,返回一个列表，包含文件夹下所有文件"""
-    fileList = []
+    #fileList = []
     for root, dirs, files in os.walk(path):
         for file in files:
-            fileList.append(os.path.join(root, file))
-    return fileList
+            #fileList.append(os.path.join(root, file))
+            yield os.path.join(root, file)
+    # return fileList
 
 
 def hasChinese(check_str):
@@ -27,8 +28,8 @@ def getNewName(fname: str):
 
 def rename(path: str):
     """ 把文件夹path下文件由中文名.英文名重命名为[中文名].英文名, 方便emby削刮 """
-    fileList = getFileList(path)
-    for file in fileList:
+    # fileList =
+    for file in getFileList(path):
         fpath, fname = os.path.split(file)
         fname = getNewName(fname)
         newName = os.path.join(fpath, fname)
@@ -40,7 +41,7 @@ def rename(path: str):
 
 
 if __name__ == '__main__':
-    fname = 'A计划.Project.A.1983.BluRay.1080p.x265.10bit.2Audio.MNHD-FRDS.mkv'
-    print(getNewName(fname))
-    path = '/mov'
+    # fname = 'A计划.Project.A.1983.BluRay.1080p.x265.10bit.2Audio.MNHD-FRDS.mkv'
+    # print(getNewName(fname))
+    path = '/onedrive/mov/mov/电影/合集/成龙'
     rename(path)
