@@ -34,10 +34,7 @@
         let videoUrl, videoTitle;
         let path = window.location.href.split('=')[1];
         videoTitle = path.split('/').pop()
-        if (path.indexOf('private') === -1)
-            videoUrl = alistUrl + path
-        else
-            $.ajax({
+        $.ajax({
                 url: 'https://movie.onerookie.site/api/detail?target=' + path,
                 type: 'get',
                 async: false,
