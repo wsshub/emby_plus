@@ -65,10 +65,7 @@ async function wangpanopen() {
 }
 
 async function getVideoUrl() {
-    const path = await getVideoPath()
-    if (path.indexOf('private') === -1) {
-        return alistUrl + path
-    }
+    let path = getVideoPath
     let videoUrl = ''
     var ajax = new XMLHttpRequest();
     // true:请求为异步  false:同步
@@ -78,16 +75,15 @@ async function getVideoUrl() {
             videoUrl = res['true_url'];
         } else return null;
     }
-    ajax.open("GET", flaskUrl + itemId, false);
+    ajax.open("GET", flaskUrl + path, false);
     ajax.send();
     return videoUrl;
 }
+
 async function getVideoPath() {
     const userId = ApiClient._serverInfo.UserId
     const itemId = /\?id=(\d*)/.exec(window.location.hash)[1]
     const item = await ApiClient.getItem(userId, itemId)
     let path = item.MediaSources[0].Path
-    path = path.replace('/onedrive/od-movie', '/onedrive')
-        .replace('/onedrive/ali', '/ali')
     return path
 }
