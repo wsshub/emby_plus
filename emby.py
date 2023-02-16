@@ -6,19 +6,26 @@ from logging.config import dictConfig
 
 emby_url = 'https://movie.onerookie.site'
 alist_url = 'https://pan.onerookie.site/api/fs/get'
+alist_down_url = 'https://pan.onerookie.site/d'
 main_site = "http://127.0.0.1:8096/"
-api_key = 'emby的apiKey'
+main_site_jellyfin = "http://127.0.0.1:8094/"
+api_key_jellyfin = 'xxxxxxxxxxxx'
+user_id_jellyfin = 'xxxxxxxxxxxx'
 main_port = '8096'
 new_port = '8097'
 password_value = "alist密码"
 replace_list = [
     {
-        "from": "/onedrive/od-movie/",
-        "to": "https://pan.onerookie.site/d/onedrive/"
+        "from": "/onedrive/od-movie",
+        "to": "/onedrive"
     },
     {
-        "from": "/onedrive/ali/",
-        "to": "https://pan.onerookie.site/d/ali/"
+        "from": "/onedrive/ali",
+        "to": "/ali"
+    },
+    {
+        "from": "/onedrive/private",
+        "to": "/private"
     }
 ]
 
@@ -39,9 +46,8 @@ dictConfig({
 })
 
 app = Flask(__name__)
-#也可以用sqlite
 db = pymysql.connect(
-    host='127.0.0.1', port=3306, user='root', passwd='xxxxx', database='xxxx')
+    host='127.0.0.1', port=3308, user='root', passwd='147258', database='myblog')
 
 
 @app.route('/')
@@ -65,6 +71,8 @@ def video_raw_url():
 
 @app.route('/emby/videos/<item_id>/<stream>')
 def stream_proxy(item_id, stream):
+    print(item_id)
+    print(stream)
     MediaSourceId = request.args.get('MediaSourceId')
     api_key = request.args.get('api_key')
     info_url = f"{main_site}emby/Items?Fields=Path&Ids={MediaSourceId}&api_key={api_key}"
@@ -74,20 +82,28 @@ def stream_proxy(item_id, stream):
     return redirect(true_url)
 
 
+@app.route('/Videos/<item_id>/<stream>')
+def stream_proxy_jellyfin(item_id, stream):
+    print(item_id)
+    print(stream)
+    info_url = f"{main_site_jellyfin}Items/{item_id}/PlaybackInfo?api_key={api_key_jellyfin}&userId={user_id_jellyfin}"
+    print(info_url)
+    info_json = requests.get(url=info_url).json()
+    index_url = str(info_json['MediaSources'][0]['Path'])
+    true_url = getRawUrl(index_url)
+    return redirect(true_url)
+
+
 def getRawUrl(index_url):
-    if 'private' in index_url:
+    for a in replace_list:
+        index_url = index_url.replace(a['from'], a['to'])
         data_pass = {"password": password_value,
-                     'path': index_url.replace('/onedrive', '')}
-        true_result = requests.post(
-            alist_url, allow_redirects=False, data=data_pass)
-        j = json.loads(true_result.text)
-        true_url = j['data']['raw_url']
-    else:
-        for a in replace_list:
-            index_url = index_url.replace(a['from'], a['to'])
-        app.logger.info(f"处理后的直链:{index_url}")
-        true_result = requests.get(index_url, allow_redirects=False)
-        true_url = dict(true_result.headers)['Location']
+                     'path': index_url}
+    true_result = requests.post(
+        alist_url, data=data_pass)
+    j = json.loads(true_result.text)
+    sign = j['data']['sign']
+    true_url = alist_down_url+index_url+'?sign='+sign
     app.logger.info(f"重定向后的直链{true_url}")
     return true_url
 
@@ -138,4 +154,4 @@ def insert(sql):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10809)
+    app.run(host='0.0.0.0', port=new_port)
